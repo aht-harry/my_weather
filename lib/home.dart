@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:my_weather/Models/seach.dart';
 import 'package:my_weather/components/myappbartext.dart';
 import 'package:my_weather/components/mydrawer.dart';
 import 'package:my_weather/components/myicon.dart';
@@ -7,6 +8,7 @@ import 'package:my_weather/components/mytext.dart';
 import 'package:intl/intl.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:my_weather/controller/controller.dart';
+import 'package:my_weather/core/local.dart';
 import 'package:my_weather/screens/currentdetail.dart';
 import 'package:my_weather/screens/currentweather.dart';
 import 'package:my_weather/screens/hourly.dart';
@@ -19,16 +21,26 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   late Controller _controller;
-
+  Local _localStorage = Local();
+  late Future<List<Town>> _town;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _controller = new Controller();
+    _town = this._localStorage.getList();
+  }
+
+  void getabc() async {
+    this._town.then((value) {
+      print(value);
+      print('object');
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    getabc();
     return Scaffold(
         drawer: MyDrawer(),
         appBar: AppBar(

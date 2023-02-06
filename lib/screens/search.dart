@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_weather/Models/seach.dart';
 import 'package:my_weather/components/mytext.dart';
 import 'package:my_weather/controller/search.dart';
+import 'package:my_weather/core/_config.dart';
+import 'package:my_weather/core/local.dart';
 
 class searchView extends StatefulWidget {
   const searchView({super.key});
@@ -14,6 +17,7 @@ class _searchViewState extends State<searchView> {
   late String _query;
   late Search _search;
   late String _results = '';
+  Local _localStorage = Local();
   @override
   void initState() {
     // TODO: implement initState
@@ -50,11 +54,18 @@ class _searchViewState extends State<searchView> {
                           color: Colors.white24,
                           borderRadius: BorderRadius.circular(15)),
                       child: TextField(
+                        onChanged: (value) {
+                          setState(() {
+                            if (value.length > 3) {
+                              _results = value;
+                            }
+                          });
+                        },
                         style: TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                             border: InputBorder.none,
                             fillColor: Colors.white,
-                            hintText: 'Enter text here',
+                            hintText: 'Vị trí',
                             hintStyle: TextStyle(color: Colors.white)),
                       ),
                     )),
@@ -75,36 +86,32 @@ class _searchViewState extends State<searchView> {
                 Expanded(
                     child: Container(
                   padding: EdgeInsets.all(15),
-                  child: ListView.builder(
-                    itemCount: 3,
-                    itemBuilder: (context, index) {
-                      return MyText.baseText(text: 'ahihi', size: 16);
+                  child: FutureBuilder<dynamic>(
+                    future: _search.getName(_results),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data != null) {
+                          return ListView.builder(
+                            itemCount: snapshot.data?.length,
+                            itemBuilder: (context, index) {
+                              return TextButton(
+                                child: Text(snapshot.data[index].name),
+                                onPressed: () {
+                                  print(snapshot.data[index]);
+                                  _localStorage.addToList(snapshot.data[index]);
+                                  // Navigator.pop(
+                                  //     context, snapshot.data[index].name);
+                                },
+                              );
+                            },
+                          );
+                        }
+                        return LinearProgressIndicator();
+                      } else {
+                        return LinearProgressIndicator();
+                      }
                     },
                   ),
-                  // child: FutureBuilder<dynamic>(
-                  //   future: _search.getName(_results),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.hasData) {
-                  //       if (snapshot.data != null) {
-                  //         return ListView.builder(
-                  //           itemCount: snapshot.data?.length,
-                  //           itemBuilder: (context, index) {
-                  //             return TextButton(
-                  //               child: Text(snapshot.data[index].name),
-                  //               onPressed: () {
-                  //                 Navigator.pop(
-                  //                     context, snapshot.data[index].name);
-                  //               },
-                  //             );
-                  //           },
-                  //         );
-                  //       }
-                  //       return LinearProgressIndicator();
-                  //     } else {
-                  //       return LinearProgressIndicator();
-                  //     }
-                  //   },
-                  // ),
                 )),
               ],
             ),
