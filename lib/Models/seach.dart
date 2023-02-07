@@ -22,4 +22,15 @@ class Town {
       state: json['state'],
     );
   }
+
+  Map<String, dynamic> toJson() {
+  return {
+    'name': name,
+    'local_names': localNames,
+    'lat': lat,
+    'lon': lon,
+    'country': country,
+    'state': state,
+  };
+}
 }

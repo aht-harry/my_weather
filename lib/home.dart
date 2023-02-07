@@ -22,7 +22,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late Controller _controller;
   Local _localStorage = Local();
-  late Future<List<Town>> _town;
+  late Future<dynamic> _town;
   @override
   void initState() {
     // TODO: implement initState
@@ -34,7 +34,6 @@ class _HomeState extends State<Home> {
   void getabc() async {
     this._town.then((value) {
       print(value);
-      print('object');
     });
   }
 

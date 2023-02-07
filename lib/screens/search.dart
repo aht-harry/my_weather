@@ -97,7 +97,6 @@ class _searchViewState extends State<searchView> {
                               return TextButton(
                                 child: Text(snapshot.data[index].name),
                                 onPressed: () {
-                                  print(snapshot.data[index]);
                                   _localStorage.addToList(snapshot.data[index]);
                                   // Navigator.pop(
                                   //     context, snapshot.data[index].name);
